@@ -144,7 +144,16 @@ namespace HttpServers
 
         public void AutoAccount(string content, HttpListenerContext httpListenerContext)
         {
-            throw new NotImplementedException();
+            new ExecuteSpend().AutoAccountCommand();
+            string msg = "{\"Status\":0,\"Msg\":\"更新成功\"}";
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
         }
     }
 }

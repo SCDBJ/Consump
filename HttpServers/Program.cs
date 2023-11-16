@@ -36,12 +36,18 @@ namespace HttpServers
                             string uriPreFix2 = "http://" + ip + ":" + port + "/" + "GetConsumpList" + "/";//获取消费记录(小程序)
 
                             string uriPreFix3 = "http://" + ip + ":" + port + "/" + "SaveConsumpW" + "/";//新增消费(其他应用程序)
-                            string uriPreFix4 = "http://" + ip + ":" + port + "/" + "GetConsumpListW" + "/";//获取消费记录(其他应用程序)
+                            string uriPreFix4 = "http://" + ip + ":" + port + "/" + "GetStatisticAmount" + "/";
+                            string uriPreFix5 = "http://" + ip + ":" + port + "/" + "GetStaticVerifyAmount" + "/";
+                            string uriPreFix6 = "http://" + ip + ":" + port + "/" + "DeleteConsumpRecord" + "/";
+                            string uriPreFix7 = "http://" + ip + ":" + port + "/" + "AutoAccount" + "/";
 
                             listerner.Prefixes.Add(uriPreFix1);
                             listerner.Prefixes.Add(uriPreFix2);
                             listerner.Prefixes.Add(uriPreFix3);
                             listerner.Prefixes.Add(uriPreFix4);
+                            listerner.Prefixes.Add(uriPreFix5);
+                            listerner.Prefixes.Add(uriPreFix6);
+                            listerner.Prefixes.Add(uriPreFix7);
                             listerner.Start();
                         }
                         catch (Exception e)
@@ -129,7 +135,21 @@ namespace HttpServers
                         case "GetConsumpList"://获取消费记录(小程序)
                             response.GetConsumpList(content, ctx);
                             break;
-
+                        case "SaveComsumpeW"://保存消费记录(其他应用程序)
+                            response.SaveComsumpeW(content, ctx);
+                            break;
+                        case "GetStatisticAmount":
+                            response.GetStatisticAmount(content, ctx);
+                            break;
+                        case "GetStaticVerifyAmount":
+                            response.GetStaticVerifyAmount(content, ctx);
+                            break;
+                        case "DeleteConsumpRecord":
+                            response.DeleteConsumpRecord(content, ctx);
+                            break;
+                        case "AutoAccount":
+                            response.AutoAccount(content, ctx);
+                            break;
                     }
                 }
                 catch (Exception ex)
