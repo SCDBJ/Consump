@@ -8,11 +8,12 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>HttpServers</RootNamespace>
     <AssemblyName>HttpServers</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+   <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,14 +57,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IHttpServer.cs" />
-    <Compile Include="Model\StatisticSpendModel.cs" />
+    <Compile Include="Model\ConsumpAllModel.cs" />
+    <Compile Include="Model\IncomeAddModel.cs" />
+    <Compile Include="Model\IncomeWModel.cs" />
+    <Compile Include="Model\Salary\SalaryItem.cs" />
+    <Compile Include="Model\StatisticConsumpModel.cs" />
     <Compile Include="Model\ConsumpModel.cs" />
     <Compile Include="Model\ConsumpWModel.cs" />
+    <Compile Include="Model\StatisticIncomeModel.cs" />
     <Compile Include="Model\StatiVerifyModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHttp.cs" />
-    <Compile Include="StoreProcedure\ExecuteSpend.cs" />
+    <Compile Include="StoreProcedure\ExecuteIncome.cs" />
+    <Compile Include="StoreProcedure\ExecuteConsump.cs" />
+    <Compile Include="StoreProcedure\ExecuteSalary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

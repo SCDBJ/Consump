@@ -14,10 +14,20 @@ namespace HttpServers
         void SaveComsumpe(string content, HttpListenerContext httpListenerContext);
         void GetConsumpList(string content, HttpListenerContext httpListenerContext);
 
-        void SaveComsumpeW(string content, HttpListenerContext httpListenerContext);
+        void SaveConsumpW(string content, HttpListenerContext httpListenerContext);
         void GetStatisticAmount(string content, HttpListenerContext httpListenerContext);
         void GetStaticVerifyAmount(string content, HttpListenerContext httpListenerContext);
+        void GetAllConsump(string content, HttpListenerContext httpListenerContext);
         void DeleteConsumpRecord(string content, HttpListenerContext httpListenerContext);
         void AutoAccount(string content, HttpListenerContext httpListenerContext);
+        void SaveIncomeW(string content, HttpListenerContext httpListenerContext);
+        void GetAllIncome(string content, HttpListenerContext httpListenerContext);
+        void GetIncomeStatisticAmount(string content, HttpListenerContext httpListenerContext);
+        void GetStatisticYearAmount(string content, HttpListenerContext httpListenerContext);
+        void DeleteIncomeRecord(string content, HttpListenerContext httpListenerContext);
+        void GetIncomeStatisticTypeAmount(string content, HttpListenerContext httpListenerContext);
+        void GetIncomeStatisticMonthAmount(string content, HttpListenerContext httpListenerContext);
+        void AddSalaryRecord(string content, HttpListenerContext httpListenerContext);
+        void GetAllSalaryRecord(string content, HttpListenerContext httpListenerContext);
     }
 }

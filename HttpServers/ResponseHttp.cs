@@ -1,5 +1,6 @@
 ﻿
 using HttpServers.Model;
+using HttpServers.Model.Salary;
 using HttpServers.StoreProcedure;
 
 using LogLib;
@@ -27,7 +28,7 @@ namespace HttpServers
             {
                 try
                 {
-                    int result = new ExecuteSpend().AddConsumpRecordCommand(consumpModel);
+                    int result = new ExecuteConsump().AddConsumpRecordCommand(consumpModel);
                     if (result == 1)
                     {
                         msg = "{\"Status\":1,\"msg\":\"保存成功\"}";
@@ -52,7 +53,7 @@ namespace HttpServers
         {
             string startTime = Regex.Match(content, @"\""startDate\"":\""(?<startDate>[\S\s]*?)\""").Groups["startDate"].Value;
             string endTime = Regex.Match(content, @"\""endDate\"":\""(?<endDate>[\S\s]*?)\""").Groups["endDate"].Value;
-            string json= new ExecuteSpend().GetConsumpList(startTime, endTime);
+            string json= new ExecuteConsump().GetConsumpList(startTime, endTime);
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(json);
@@ -63,7 +64,7 @@ namespace HttpServers
             }
         }
 
-        public void SaveComsumpeW(string content, HttpListenerContext httpListenerContext)
+        public void SaveConsumpW(string content, HttpListenerContext httpListenerContext)
         {
             ConsumpWModel consumpWModel = Newtonsoft.Json.JsonConvert.DeserializeObject<ConsumpWModel>(content);
             string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
@@ -71,7 +72,7 @@ namespace HttpServers
             {
                 try
                 {
-                    int result = new ExecuteSpend().AddConsumpRecordCommand(consumpWModel);
+                    int result = new ExecuteConsump().AddConsumpRecordCommand(consumpWModel);
                     Console.WriteLine("result:" + result);
                     if (result == 1)
                     {
@@ -96,8 +97,8 @@ namespace HttpServers
         }
         public void GetStatisticAmount(string content, HttpListenerContext httpListenerContext)
         {
-            int year = int.Parse(Regex.Match(content, @"\""year\"":\""(?<year>[\S\s]*?)\""").Groups["year"].Value);
-            string json = new ExecuteSpend().GetStatisticAmountCommand(year);
+            int year = int.Parse(Regex.Match(content, @"\""consumpYear\"":\""(?<consumpYear>[\S\s]*?)\""").Groups["consumpYear"].Value);
+            string json = new ExecuteConsump().GetStatisticAmountCommand(year);
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(json);
@@ -110,9 +111,21 @@ namespace HttpServers
 
         public void GetStaticVerifyAmount(string content, HttpListenerContext httpListenerContext)
         {
-            int year = int.Parse(Regex.Match(content, @"\""year\"":\""(?<year>[\S\s]*?)\""").Groups["year"].Value);
-            int month = int.Parse(Regex.Match(content, @"\""month\"":\""(?<month>[\S\s]*?)\""").Groups["month"].Value);
-            string json = new ExecuteSpend().GetStaticVerifyAmountCommand(year.ToString(), month);
+            int year = int.Parse(Regex.Match(content, @"\""consumpYear\"":\""(?<consumpYear>[\S\s]*?)\""").Groups["consumpYear"].Value);
+            int month = int.Parse(Regex.Match(content, @"\""consumpMonth\"":\""(?<consumpMonth>[\S\s]*?)\""").Groups["consumpMonth"].Value);
+            string json = new ExecuteConsump().GetStaticVerifyAmountCommand(year.ToString(), month);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void GetAllConsump(string content, HttpListenerContext httpListenerContext)
+        {
+            string json = new ExecuteConsump().GetAllConsumpRecordCommand();
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(json);
@@ -126,7 +139,7 @@ namespace HttpServers
         public void DeleteConsumpRecord(string content, HttpListenerContext httpListenerContext)
         {
             int consumpId = int.Parse(Regex.Match(content, @"\""consumpId\"":\""(?<consumpId>[\S\s]*?)\""").Groups["consumpId"].Value);
-            int result = new ExecuteSpend().DeleteConsumpRecordCommand(consumpId);
+            int result = new ExecuteConsump().DeleteConsumpRecordCommand(consumpId);
             string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
             if (result == 1)
             {
@@ -144,7 +157,7 @@ namespace HttpServers
 
         public void AutoAccount(string content, HttpListenerContext httpListenerContext)
         {
-            new ExecuteSpend().AutoAccountCommand();
+            new ExecuteConsump().AutoAccountCommand();
             string msg = "{\"Status\":0,\"Msg\":\"更新成功\"}";
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
@@ -152,6 +165,157 @@ namespace HttpServers
                 writer.Close();
                 httpListenerContext.Response.Close();
                 Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void SaveIncomeW(string content, HttpListenerContext httpListenerContext)
+        {
+            IncomeWModel incomeWModel = Newtonsoft.Json.JsonConvert.DeserializeObject<IncomeWModel>(content);
+            string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
+
+            if (incomeWModel != null)
+            {
+                try
+                {
+                    int result = new ExecuteIncome().AddIncomeRecordCommand(incomeWModel);
+                    if (result == 1)
+                    {
+                        msg = "{\"Status\":1,\"msg\":\"保存成功\"}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    msg = "{\"Status\":0,\"msg\":\"" + ex.Message + "\"}";
+                }
+
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetAllIncome(string content, HttpListenerContext httpListenerContext)
+        {
+            string json = new ExecuteIncome().GetAllIncomeRecordCommand();
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetIncomeStatisticAmount(string content, HttpListenerContext httpListenerContext)
+        {
+            string year = Regex.Match(content, @"\""incomeYear\"":\""(?<incomeYear>[\S\s]*?)\""").Groups["incomeYear"].Value;
+            string json = new ExecuteIncome().GetStatisticAmountCommand(year);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetStatisticYearAmount(string content, HttpListenerContext httpListenerContext)
+        {
+            int year = int.Parse(Regex.Match(content, @"\""incomeYear\"":\""(?<incomeYear>[\S\s]*?)\""").Groups["incomeYear"].Value);
+            string json = new ExecuteIncome().GetStatisticYearAmountCommand(year.ToString());
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void DeleteIncomeRecord(string content, HttpListenerContext httpListenerContext)
+        {
+            int incomeId = int.Parse(Regex.Match(content, @"\""incomeId\"":\""(?<incomeId>[\S\s]*?)\""").Groups["incomeId"].Value);
+            int result = new ExecuteIncome().DeleteIncomeRecordCommand(incomeId);
+            string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
+            if (result == 1)
+            {
+                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetIncomeStatisticTypeAmount(string content, HttpListenerContext httpListenerContext)
+        {
+            string incomeType = Regex.Match(content, @"\""incomeType\"":\""(?<incomeType>[\S\s]*?)\""").Groups["incomeType"].Value;
+            string json = new ExecuteIncome().GetStatisticTypeAmountCommand(incomeType);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetIncomeStatisticMonthAmount(string content, HttpListenerContext httpListenerContext)
+        {
+            string incomeType = Regex.Match(content, @"\""incomeType\"":\""(?<incomeType>[\S\s]*?)\""").Groups["incomeType"].Value;
+            string json = new ExecuteIncome().GetStatisticMonthAmountCommand(incomeType);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void AddSalaryRecord(string content, HttpListenerContext httpListenerContext)
+        {
+            SalaryItem salaryItem= Newtonsoft.Json.JsonConvert.DeserializeObject<SalaryItem>(content);
+            int result = new ExecuteSalary().AddSalaryRecordCommand(salaryItem);
+            string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
+            if (result.Equals(1))
+            {
+                msg = "{\"Status\":0,\"Msg\":\"保存成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetAllSalaryRecord(string content, HttpListenerContext httpListenerContext)
+        {
+            string json = new ExecuteSalary().GetAllSalaryRecordCommand();
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
                 Console.WriteLine("----------------------------------------------------");
             }
         }

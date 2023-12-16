@@ -8,27 +8,19 @@ namespace HttpServers.Model
 {
     public class ConsumpWModel
     {
-        public int spendId
+        public string consumpCategory
         {
             get; set;
         }
-        public string spendType
+        public string consumpType
         {
             get; set;
         }
-        public decimal spendAmount
+        public decimal consumpAmount
         {
             get; set;
         }
-        public string spendNote
-        {
-            get; set;
-        }
-        public DateTime spendTime
-        {
-            get; set;
-        }
-        public DateTime createTime
+        public string consumpNote
         {
             get; set;
         }

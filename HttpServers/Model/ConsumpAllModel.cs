@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace HttpServers.Model
 {
-    public class StatiVerifyModel
+    public class ConsumpAllModel
     {
-        public int consumpYear
-        {
-            get; set;
-        }
-        public int consumpMonth
+        public int consumpId
         {
             get; set;
         }
@@ -20,7 +16,19 @@ namespace HttpServers.Model
         {
             get; set;
         }
-        public decimal statisticAmount
+        public decimal consumpAmount
+        {
+            get; set;
+        }
+        public string consumpNote
+        {
+            get; set;
+        }
+        public DateTime consumpTime
+        {
+            get; set;
+        }
+        public DateTime createTime
         {
             get; set;
         }

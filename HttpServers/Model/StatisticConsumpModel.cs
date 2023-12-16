@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 
 namespace HttpServers.Model
 {
-    public class StatiVerifyModel
+    public class StatisticConsumpModel
     {
         public int consumpYear
         {
             get; set;
         }
         public int consumpMonth
-        {
-            get; set;
-        }
-        public string consumpType
         {
             get; set;
         }

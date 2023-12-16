@@ -6,21 +6,29 @@ using System.Threading.Tasks;
 
 namespace HttpServers.Model
 {
-    public class StatiVerifyModel
+    public class StatisticIncomeModel
     {
-        public int consumpYear
+        public int issueYear
         {
             get; set;
         }
-        public int consumpMonth
+        public int issueMonth
         {
             get; set;
         }
-        public string consumpType
+        public decimal incomeAmount
         {
             get; set;
         }
-        public decimal statisticAmount
+        public decimal spendAmount
+        {
+            get; set;
+        }
+        public decimal netincomeAmount
+        {
+            get; set;
+        }
+        public string incomeType
         {
             get; set;
         }

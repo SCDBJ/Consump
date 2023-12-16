@@ -40,6 +40,18 @@ namespace HttpServers
                             string uriPreFix5 = "http://" + ip + ":" + port + "/" + "GetStaticVerifyAmount" + "/";
                             string uriPreFix6 = "http://" + ip + ":" + port + "/" + "DeleteConsumpRecord" + "/";
                             string uriPreFix7 = "http://" + ip + ":" + port + "/" + "AutoAccount" + "/";
+                            string uriPreFix8 = "http://" + ip + ":" + port + "/" + "GetAllConsump" + "/";
+                            string uriPreFix9 = "http://" + ip + ":" + port + "/" + "SaveIncomeW" + "/";
+                            string uriPreFix10 = "http://" + ip + ":" + port + "/" + "GetAllIncome" + "/";
+                            string uriPreFix11 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticAmount" + "/";
+                            string uriPreFix12 = "http://" + ip + ":" + port + "/" + "GetStatisticYearAmount" + "/";
+                            string uriPreFix13 = "http://" + ip + ":" + port + "/" + "DeleteIncomeRecord" + "/";
+                            string uriPreFix14 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticTypeAmount" + "/";
+                            string uriPreFix15 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticMonthAmount" + "/";
+                            string uriPreFix16 = "http://" + ip + ":" + port + "/" + "AddSalaryRecord" + "/";
+                            string uriPreFix17 = "http://" + ip + ":" + port + "/" + "GetAllSalaryRecord" + "/";
+                            
+
 
                             listerner.Prefixes.Add(uriPreFix1);
                             listerner.Prefixes.Add(uriPreFix2);
@@ -48,6 +60,16 @@ namespace HttpServers
                             listerner.Prefixes.Add(uriPreFix5);
                             listerner.Prefixes.Add(uriPreFix6);
                             listerner.Prefixes.Add(uriPreFix7);
+                            listerner.Prefixes.Add(uriPreFix8);
+                            listerner.Prefixes.Add(uriPreFix9);
+                            listerner.Prefixes.Add(uriPreFix10);
+                            listerner.Prefixes.Add(uriPreFix11);
+                            listerner.Prefixes.Add(uriPreFix12);
+                            listerner.Prefixes.Add(uriPreFix13);
+                            listerner.Prefixes.Add(uriPreFix14);
+                            listerner.Prefixes.Add(uriPreFix15);
+                            listerner.Prefixes.Add(uriPreFix16);
+                            listerner.Prefixes.Add(uriPreFix17);
                             listerner.Start();
                         }
                         catch (Exception e)
@@ -135,8 +157,8 @@ namespace HttpServers
                         case "GetConsumpList"://获取消费记录(小程序)
                             response.GetConsumpList(content, ctx);
                             break;
-                        case "SaveComsumpeW"://保存消费记录(其他应用程序)
-                            response.SaveComsumpeW(content, ctx);
+                        case "SaveConsumpW"://保存消费记录(其他应用程序)
+                            response.SaveConsumpW(content, ctx);
                             break;
                         case "GetStatisticAmount":
                             response.GetStatisticAmount(content, ctx);
@@ -144,12 +166,43 @@ namespace HttpServers
                         case "GetStaticVerifyAmount":
                             response.GetStaticVerifyAmount(content, ctx);
                             break;
+                        case "GetAllConsump":
+                            response.GetAllConsump(content, ctx);
+                            break;
                         case "DeleteConsumpRecord":
                             response.DeleteConsumpRecord(content, ctx);
                             break;
                         case "AutoAccount":
                             response.AutoAccount(content, ctx);
                             break;
+                        case "SaveIncomeW":
+                            response.SaveIncomeW(content, ctx);
+                            break;
+                        case "GetAllIncome":
+                            response.GetAllIncome(content, ctx);
+                            break;
+                        case "GetIncomeStatisticAmount":
+                            response.GetIncomeStatisticAmount(content, ctx);
+                            break;
+                        case "GetStatisticYearAmount":
+                            response.GetStatisticYearAmount(content, ctx);
+                            break;
+                        case "DeleteIncomeRecord":
+                            response.DeleteIncomeRecord(content, ctx);
+                            break;
+                        case "GetIncomeStatisticTypeAmount":
+                            response.GetIncomeStatisticTypeAmount(content, ctx);
+                            break;
+                        case "GetIncomeStatisticMonthAmount":
+                            response.GetIncomeStatisticMonthAmount(content, ctx);
+                            break;
+                        case "AddSalaryRecord":
+                            response.AddSalaryRecord(content, ctx);
+                            break;
+                        case "GetAllSalaryRecord":
+                            response.GetAllSalaryRecord(content, ctx);
+                            break;
+                            
                     }
                 }
                 catch (Exception ex)

@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace HttpServers.StoreProcedure
 {
-    public class ExecuteSpend
+    public class ExecuteConsump
     {
         string connectionString;
-        public ExecuteSpend()
+        public ExecuteConsump()
         {
             connectionString = ConfigurationManager.AppSettings["ConnectionString"];
         }
-        public int AddConsumpRecordCommand(ConsumpWModel spend)
+        public int AddConsumpRecordCommand(ConsumpWModel consumpWModel)
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             if (myConnection.State != ConnectionState.Open)
@@ -29,11 +29,11 @@ namespace HttpServers.StoreProcedure
             myCommand.CommandType = CommandType.StoredProcedure;
 
             myCommand.Parameters.Add("@consumpType", SqlDbType.VarChar);
-            myCommand.Parameters["@consumpType"].Value = spend.spendType;
+            myCommand.Parameters["@consumpType"].Value = consumpWModel.consumpType;
             myCommand.Parameters.Add("@consumpAmount", SqlDbType.Decimal, 10);
-            myCommand.Parameters["@consumpAmount"].Value = spend.spendAmount;
+            myCommand.Parameters["@consumpAmount"].Value = consumpWModel.consumpAmount;
             myCommand.Parameters.Add("@consumpNote", SqlDbType.VarChar);
-            myCommand.Parameters["@consumpNote"].Value = spend.spendNote;
+            myCommand.Parameters["@consumpNote"].Value = consumpWModel.consumpNote;
 
             int resultValue = myCommand.ExecuteNonQuery();
             if (myConnection.State == ConnectionState.Open)
@@ -42,7 +42,7 @@ namespace HttpServers.StoreProcedure
             }
             return resultValue;
         }
-        public DataTable GetAllConsumpRecordCommand()
+        public string GetAllConsumpRecordCommand()
         {
             DataSet ds = new DataSet();
 
@@ -55,17 +55,26 @@ namespace HttpServers.StoreProcedure
             myCommand.CommandType = CommandType.StoredProcedure;
             myCommand.ExecuteNonQuery();
 
-            SqlDataAdapter adapter = new SqlDataAdapter(myCommand);
-            adapter.Fill(ds);
+            SqlDataReader adapter = myCommand.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Load(adapter);
+            List<ConsumpAllModel> list = new List<ConsumpAllModel>();
+            if (dt.Rows.Count > 0)
+            {
+                ConsumpAllModel consumpAllModel;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    consumpAllModel = new ConsumpAllModel { consumpId = int.Parse(dt.Rows[i]["consumpId"].ToString()), consumpType =dt.Rows[i]["consumpType"].ToString(), consumpAmount = decimal.Parse(dt.Rows[i]["consumpAmount"].ToString()), consumpNote= dt.Rows[i]["consumpNote"].ToString(), consumpTime=DateTime.Parse(dt.Rows[i]["consumpTime"].ToString()), createTime=DateTime.Parse(dt.Rows[i]["createTime"].ToString()) };
+                    list.Add(consumpAllModel);
+                }
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+                return json;
+            }
             if (myConnection.State == ConnectionState.Open)
             {
                 myConnection.Close();
             }
-            if (ds.Tables.Count > 0)
-            {
-                DataTable dataTable = ds.Tables[0];
-                return dataTable;
-            }
+
             return null;
         }
         public string GetStatisticAmountCommand(int year)
@@ -84,13 +93,13 @@ namespace HttpServers.StoreProcedure
             SqlDataReader sqlDataReader = myCommand.ExecuteReader();
             DataTable dt = new DataTable();
             dt.Load(sqlDataReader);
-            List<StatisticSpendModel> list = new List<StatisticSpendModel>();
+            List<StatisticConsumpModel> list = new List<StatisticConsumpModel>();
             if (dt.Rows.Count > 0)
             {
-                StatisticSpendModel statisticSpendModel;
+                StatisticConsumpModel statisticSpendModel;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    statisticSpendModel = new StatisticSpendModel { spendYear = int.Parse(dt.Rows[i]["spendYear"].ToString()), spendMonth = int.Parse(dt.Rows[i]["spendMonth"].ToString()), statisticAmount = decimal.Parse(dt.Rows[i]["consumpTime"].ToString())};
+                    statisticSpendModel = new StatisticConsumpModel { consumpYear = int.Parse(dt.Rows[i]["consumpYear"].ToString()), consumpMonth = int.Parse(dt.Rows[i]["consumpMonth"].ToString()), statisticAmount = decimal.Parse(dt.Rows[i]["consumpAmount"].ToString())};
                     list.Add(statisticSpendModel);
                 }
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
@@ -124,10 +133,19 @@ namespace HttpServers.StoreProcedure
             if (dt.Rows.Count > 0)
             {
                 StatiVerifyModel statiVerifyModel;
+                if(year != "全部"&month ==0|| year=="全部" & month != 0)
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    statiVerifyModel = new StatiVerifyModel { spendYear = int.Parse(dt.Rows[i]["spendYear"].ToString()), spendMonth = int.Parse(dt.Rows[i]["spendMonth"].ToString()), spendType = dt.Rows[i]["spendType"].ToString(), statisticAmount = decimal.Parse(dt.Rows[i]["statisticAmount"].ToString()) };
+                    statiVerifyModel = new StatiVerifyModel { consumpYear = int.Parse(dt.Rows[i]["年"].ToString()), consumpType = dt.Rows[i]["类别"].ToString(), statisticAmount = decimal.Parse(dt.Rows[i]["金额"].ToString()) };
                     list.Add(statiVerifyModel);
+                }
+                else
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        statiVerifyModel = new StatiVerifyModel { consumpYear = int.Parse(dt.Rows[i]["年"].ToString()), consumpMonth = int.Parse(dt.Rows[i]["月"].ToString()), consumpType = dt.Rows[i]["类别"].ToString(), statisticAmount = decimal.Parse(dt.Rows[i]["金额"].ToString()) };
+                        list.Add(statiVerifyModel);
+                    }
                 }
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
                 return json;

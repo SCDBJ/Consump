@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace HttpServers.Model
 {
-    public class StatisticSpendModel
+    public class IncomeWModel
     {
-        public int spendYear
+        public string incomeType
         {
             get; set;
         }
-        public int spendMonth
+        public decimal incomeAmount
         {
             get; set;
         }
-        public decimal statisticAmount
+        public DateTime incomeTime
+        {
+            get; set;
+        }
+        public string incomeNote
         {
             get; set;
         }
