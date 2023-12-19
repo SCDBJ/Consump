@@ -29,5 +29,8 @@ namespace HttpServers
         void GetIncomeStatisticMonthAmount(string content, HttpListenerContext httpListenerContext);
         void AddSalaryRecord(string content, HttpListenerContext httpListenerContext);
         void GetAllSalaryRecord(string content, HttpListenerContext httpListenerContext);
+        void AddCategory(string content, HttpListenerContext httpListenerContext);
+        void GetAllCategory(string content, HttpListenerContext httpListenerContext);
+        void DeleteCategory(string content, HttpListenerContext httpListenerContext);
     }
 }

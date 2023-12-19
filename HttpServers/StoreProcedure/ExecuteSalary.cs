@@ -16,7 +16,7 @@ namespace HttpServers.StoreProcedure
         string connectionString;
         public ExecuteSalary()
         {
-            connectionString = ConfigurationManager.AppSettings["ConnectionString"];;
+            connectionString = ConfigurationManager.AppSettings["ConnectionString"];
         }
         public int AddSalaryRecordCommand(SalaryItem salaryItem)
         {

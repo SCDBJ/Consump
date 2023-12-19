@@ -319,5 +319,56 @@ namespace HttpServers
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+
+        public void AddCategory(string content, HttpListenerContext httpListenerContext)
+        {
+            CategoryAddModel categoryAddModel = Newtonsoft.Json.JsonConvert.DeserializeObject<CategoryAddModel>(content);
+            int result = new ExecuteCategory().AddCategoryCommand(categoryAddModel);
+            string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
+            if (result.Equals(1))
+            {
+                msg = "{\"Status\":0,\"Msg\":\"保存成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetAllCategory(string content, HttpListenerContext httpListenerContext)
+        {
+            string json = new ExecuteCategory().GetAllCategoryCommand();
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void DeleteCategory(string content, HttpListenerContext httpListenerContext)
+        {
+            int categoryId = int.Parse(Regex.Match(content, @"\""categoryId\"":\""(?<categoryId>[\S\s]*?)\""").Groups["categoryId"].Value);
+            int result = new ExecuteCategory().DeleteCategoryCommand(categoryId);
+            string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
+            if (result == 1)
+            {
+                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
     }
 }

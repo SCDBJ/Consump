@@ -1,4 +1,5 @@
 ﻿
+using HttpServers.Common;
 using LogLib;
 
 using System;
@@ -31,45 +32,9 @@ namespace HttpServers
                     {
                         try
                         {
-                            listerner.AuthenticationSchemes = AuthenticationSchemes.Anonymous;//指定身份验证 Anonymous匿名访问
-                            string uriPreFix1 = "http://" + ip + ":" + port + "/" + "SaveConsump" + "/";//新增消费(小程序)
-                            string uriPreFix2 = "http://" + ip + ":" + port + "/" + "GetConsumpList" + "/";//获取消费记录(小程序)
-
-                            string uriPreFix3 = "http://" + ip + ":" + port + "/" + "SaveConsumpW" + "/";//新增消费(其他应用程序)
-                            string uriPreFix4 = "http://" + ip + ":" + port + "/" + "GetStatisticAmount" + "/";
-                            string uriPreFix5 = "http://" + ip + ":" + port + "/" + "GetStaticVerifyAmount" + "/";
-                            string uriPreFix6 = "http://" + ip + ":" + port + "/" + "DeleteConsumpRecord" + "/";
-                            string uriPreFix7 = "http://" + ip + ":" + port + "/" + "AutoAccount" + "/";
-                            string uriPreFix8 = "http://" + ip + ":" + port + "/" + "GetAllConsump" + "/";
-                            string uriPreFix9 = "http://" + ip + ":" + port + "/" + "SaveIncomeW" + "/";
-                            string uriPreFix10 = "http://" + ip + ":" + port + "/" + "GetAllIncome" + "/";
-                            string uriPreFix11 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticAmount" + "/";
-                            string uriPreFix12 = "http://" + ip + ":" + port + "/" + "GetStatisticYearAmount" + "/";
-                            string uriPreFix13 = "http://" + ip + ":" + port + "/" + "DeleteIncomeRecord" + "/";
-                            string uriPreFix14 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticTypeAmount" + "/";
-                            string uriPreFix15 = "http://" + ip + ":" + port + "/" + "GetIncomeStatisticMonthAmount" + "/";
-                            string uriPreFix16 = "http://" + ip + ":" + port + "/" + "AddSalaryRecord" + "/";
-                            string uriPreFix17 = "http://" + ip + ":" + port + "/" + "GetAllSalaryRecord" + "/";
                             
-
-
-                            listerner.Prefixes.Add(uriPreFix1);
-                            listerner.Prefixes.Add(uriPreFix2);
-                            listerner.Prefixes.Add(uriPreFix3);
-                            listerner.Prefixes.Add(uriPreFix4);
-                            listerner.Prefixes.Add(uriPreFix5);
-                            listerner.Prefixes.Add(uriPreFix6);
-                            listerner.Prefixes.Add(uriPreFix7);
-                            listerner.Prefixes.Add(uriPreFix8);
-                            listerner.Prefixes.Add(uriPreFix9);
-                            listerner.Prefixes.Add(uriPreFix10);
-                            listerner.Prefixes.Add(uriPreFix11);
-                            listerner.Prefixes.Add(uriPreFix12);
-                            listerner.Prefixes.Add(uriPreFix13);
-                            listerner.Prefixes.Add(uriPreFix14);
-                            listerner.Prefixes.Add(uriPreFix15);
-                            listerner.Prefixes.Add(uriPreFix16);
-                            listerner.Prefixes.Add(uriPreFix17);
+                            listerner.AuthenticationSchemes = AuthenticationSchemes.Anonymous;//指定身份验证 Anonymous匿名访问
+                            ListenerBinding(ref listerner);
                             listerner.Start();
                         }
                         catch (Exception e)
@@ -110,6 +75,26 @@ namespace HttpServers
             }
 
             Console.ReadKey();
+        }
+        private static void ListenerBinding(ref HttpListener listerner)
+        {
+            string configPath = Environment.CurrentDirectory + @"\config.ini";
+            string miniProgram = OperationFile.ReadIniData("Interface", "MiniProgram", "", configPath);
+            List<string> interList = new List<string>();
+            if ( miniProgram != null )
+            {
+                interList.AddRange(miniProgram.Split(',').ToList());
+            }
+            string appProgram = OperationFile.ReadIniData("Interface", "AppProgram", "", configPath);
+            if(appProgram!=null )
+            {
+                interList.AddRange(appProgram.Split(',').ToList());
+            }
+            string uriPreFix = "http://" + ip + ":" + port + "/";
+            for (int i = 0; i < interList.Count; i++)
+            {
+                listerner.Prefixes.Add(uriPreFix + interList[i]+"/");
+            }
         }
         static void TaskProc(object o)
         {
@@ -201,6 +186,15 @@ namespace HttpServers
                             break;
                         case "GetAllSalaryRecord":
                             response.GetAllSalaryRecord(content, ctx);
+                            break;
+                        case "AddCategory":
+                            response.AddCategory(content, ctx);
+                            break;
+                        case "GetAllCategory":
+                            response.GetAllCategory(content, ctx);
+                            break;
+                        case "DeleteCategory":
+                            response.DeleteCategory(content, ctx);
                             break;
                             
                     }
