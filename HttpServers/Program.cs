@@ -83,12 +83,12 @@ namespace HttpServers
             List<string> interList = new List<string>();
             if ( miniProgram != null )
             {
-                interList.AddRange(miniProgram.Split(',').ToList());
+                interList.AddRange(miniProgram.Split('|').ToList());
             }
             string appProgram = OperationFile.ReadIniData("Interface", "AppProgram", "", configPath);
             if(appProgram!=null )
             {
-                interList.AddRange(appProgram.Split(',').ToList());
+                interList.AddRange(appProgram.Split('|').ToList());
             }
             string uriPreFix = "http://" + ip + ":" + port + "/";
             for (int i = 0; i < interList.Count; i++)
@@ -119,7 +119,6 @@ namespace HttpServers
                 {
                     content = reader.ReadToEnd();
                 }
-
             }
             catch (Exception ex)
             {

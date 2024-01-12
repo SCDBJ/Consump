@@ -28,10 +28,17 @@ namespace HttpServers
             {
                 try
                 {
-                    int result = new ExecuteConsump().AddConsumpRecordCommand(consumpModel);
-                    if (result == 1)
+                    if (consumpModel.consumpType.Equals("请选择"))
                     {
-                        msg = "{\"Status\":1,\"msg\":\"保存成功\"}";
+                        msg = "{\"Status\":0,\"Msg\":\"请选择消费类型\"}";
+                    }
+                    else
+                    {
+                        int result = new ExecuteConsump().AddConsumpRecordCommand(consumpModel);
+                        if (result == 1)
+                        {
+                            msg = "{\"Status\":1,\"msg\":\"保存成功\"}";
+                        }
                     }
                 }
                 catch (Exception ex)
