@@ -74,7 +74,7 @@ namespace HttpServers.StoreProcedure
             }
             return resultValue;
         }
-        public DataTable GetSalaryDateRecordCommand(int? datacyear, string? datacperiod)
+        public string GetSalaryDateRecordCommand(int? datacyear, string? datacperiod)
         {
             DataSet ds = new DataSet();
 
@@ -97,12 +97,11 @@ namespace HttpServers.StoreProcedure
             {
                 myConnection.Close();
             }
-            if (ds.Tables.Count > 0)
+            if (ds.Tables.Count > 0&& ds.Tables[0].Rows.Count>0)
             {
-                DataTable dataTable = ds.Tables[0];
-                return dataTable;
+                return "1";
             }
-            return null;
+            return "0";
         }
         public string GetAllSalaryRecordCommand()
         {

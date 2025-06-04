@@ -24,5 +24,9 @@ namespace HttpServers.Model
         {
             get; set;
         }
+        public DateTime consumpTime
+        {
+            get; set;
+        }
     }
 }

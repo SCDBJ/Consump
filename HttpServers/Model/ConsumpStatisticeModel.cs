@@ -6,25 +6,21 @@ using System.Threading.Tasks;
 
 namespace HttpServers.Model
 {
-    public class CategoryAddModel
+    public class ConsumpStatisticeModel
     {
-        public int categoryId
+        public string consumpType
+        {
+            get;set;
+        }
+        public string numbers
         {
             get; set;
         }
-        public string categoryName
+        public string sumamount
         {
             get; set;
         }
-        public string categoryType
-        {
-            get; set;
-        }
-        public DateTime createTime
-        {
-            get; set;
-        }
-        public int priority
+        public string avgamount
         {
             get; set;
         }

@@ -144,6 +144,9 @@ namespace HttpServers
                         case "SaveConsumpW"://保存消费记录(其他应用程序)
                             response.SaveConsumpW(content, ctx);
                             break;
+                        case "GetConsumpStatW"://消费统计(小程序)
+                            response.GetConsumpStatW(content, ctx);
+                            break;
                         case "GetStatisticAmount":
                             response.GetStatisticAmount(content, ctx);
                             break;
@@ -195,7 +198,10 @@ namespace HttpServers
                         case "DeleteCategory":
                             response.DeleteCategory(content, ctx);
                             break;
-                            
+                        case "GetSalaryDateRecord":
+                            response.GetSalaryDateRecord(content, ctx);
+                            break;
+
                     }
                 }
                 catch (Exception ex)

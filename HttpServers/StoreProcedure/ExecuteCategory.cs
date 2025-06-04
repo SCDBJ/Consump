@@ -32,6 +32,8 @@ namespace HttpServers.StoreProcedure
             myCommand.Parameters["@categoryName"].Value = categoryAddModel.categoryName;
             myCommand.Parameters.Add("@categoryType", SqlDbType.NVarChar);
             myCommand.Parameters["@categoryType"].Value = categoryAddModel.categoryType;
+            myCommand.Parameters.Add("@categoryPriority", SqlDbType.Int);
+            myCommand.Parameters["@categoryPriority"].Value = categoryAddModel.priority;
 
             int resultValue = myCommand.ExecuteNonQuery();
             if (myConnection.State == ConnectionState.Open)
@@ -62,7 +64,7 @@ namespace HttpServers.StoreProcedure
                 CategoryAddModel categoryAddModel;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    categoryAddModel = new CategoryAddModel { categoryId = int.Parse(dt.Rows[i]["categoryId"].ToString()), categoryName= dt.Rows[i]["categoryName"].ToString(), categoryType= dt.Rows[i]["categoryType"].ToString(), createTime=DateTime.Parse(dt.Rows[i]["createTime"].ToString()) };
+                    categoryAddModel = new CategoryAddModel { categoryId = int.Parse(dt.Rows[i]["categoryId"].ToString()), categoryName= dt.Rows[i]["categoryName"].ToString(), categoryType= dt.Rows[i]["categoryType"].ToString(), createTime=DateTime.Parse(dt.Rows[i]["createTime"].ToString()) ,priority=int.Parse(dt.Rows[i]["priority"].ToString()) };
                     list.Add(categoryAddModel);
                 }
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);

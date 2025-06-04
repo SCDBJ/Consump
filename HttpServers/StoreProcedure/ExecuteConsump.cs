@@ -34,6 +34,8 @@ namespace HttpServers.StoreProcedure
             myCommand.Parameters["@consumpAmount"].Value = consumpWModel.consumpAmount;
             myCommand.Parameters.Add("@consumpNote", SqlDbType.VarChar);
             myCommand.Parameters["@consumpNote"].Value = consumpWModel.consumpNote;
+            myCommand.Parameters.Add("@consumpTime", SqlDbType.DateTime);
+            myCommand.Parameters["@consumpTime"].Value = consumpWModel.consumpTime;
 
             int resultValue = myCommand.ExecuteNonQuery();
             if (myConnection.State == ConnectionState.Open)
@@ -231,7 +233,7 @@ namespace HttpServers.StoreProcedure
 
 
         /// <summary>
-        /// 小程序用
+        /// （消费记录）小程序用
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
@@ -263,6 +265,54 @@ namespace HttpServers.StoreProcedure
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         consumpModel = new ConsumpModel { consumpType = dt.Rows[i]["consumpType"].ToString(), consumpAmount = double.Parse(dt.Rows[i]["consumpAmount"].ToString()), consumpTime=dt.Rows[i]["consumpTime"].ToString(), consumpNote= dt.Rows[i]["consumpNote"].ToString() };
+                        consumpList.Add(consumpModel);
+                    }
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(consumpList);
+                    return json;
+                }
+                if (myConnection.State == ConnectionState.Open)
+                {
+                    myConnection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception:" + ex.Message);
+                return null;
+            }
+            return null;
+        }
+        /// <summary>
+        /// （消费统计）小程序用
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public string GetConsumpStatisticW(string consumpStatisticW)
+        {
+            List<ConsumpStatisticeModel> consumpList = new List<ConsumpStatisticeModel>();
+            try
+            {
+                SqlConnection myConnection = new SqlConnection(connectionString);
+                if (myConnection.State != ConnectionState.Open)
+                {
+                    myConnection.Open();
+                }
+                SqlCommand myCommand = new SqlCommand("GetConsumpStatisticW", myConnection);
+                myCommand.CommandType = CommandType.StoredProcedure;
+
+                myCommand.Parameters.Add("@ConsumpStatisticW", SqlDbType.VarChar);
+                myCommand.Parameters["@ConsumpStatisticW"].Value = consumpStatisticW;
+
+                SqlDataReader sqlDataReader = myCommand.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(sqlDataReader);
+                if (dt.Rows.Count > 0)
+                {
+                    ConsumpStatisticeModel consumpModel = new ConsumpStatisticeModel();
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        consumpModel = new ConsumpStatisticeModel { consumpType = dt.Rows[i]["consumpType"].ToString(), numbers = dt.Rows[i]["numbers"].ToString(), sumamount = dt.Rows[i]["sumamount"].ToString(), avgamount = dt.Rows[i]["avgamount"].ToString() };
                         consumpList.Add(consumpModel);
                     }
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(consumpList);

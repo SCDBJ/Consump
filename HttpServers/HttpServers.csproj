@@ -60,6 +60,7 @@
     <Compile Include="IHttpServer.cs" />
     <Compile Include="Model\CategoryAddModel.cs" />
     <Compile Include="Model\ConsumpAllModel.cs" />
+    <Compile Include="Model\ConsumpStatisticeModel.cs" />
     <Compile Include="Model\IncomeAddModel.cs" />
     <Compile Include="Model\IncomeWModel.cs" />
     <Compile Include="Model\Salary\SalaryItem.cs" />

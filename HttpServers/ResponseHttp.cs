@@ -102,6 +102,19 @@ namespace HttpServers
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+        public void GetConsumpStatW(string content, HttpListenerContext httpListenerContext)
+        {
+            string consumpStatisticW = Regex.Match(content, @"\""consumpStatisticW\"":\""(?<consumpStatisticW>[\S\s]*?)\""").Groups["consumpStatisticW"].Value;
+            string json = new ExecuteConsump().GetConsumpStatisticW(consumpStatisticW);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(json);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + json + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
         public void GetStatisticAmount(string content, HttpListenerContext httpListenerContext)
         {
             int year = int.Parse(Regex.Match(content, @"\""consumpYear\"":\""(?<consumpYear>[\S\s]*?)\""").Groups["consumpYear"].Value);
@@ -368,6 +381,23 @@ namespace HttpServers
             {
                 msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
             }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
+        public void GetSalaryDateRecord(string content, HttpListenerContext httpListenerContext)
+        {
+            int datacyear = int.Parse(Regex.Match(content, @"\""datacyear\"":\""(?<datacyear>\d+)\""").Groups["datacyear"].Value);
+            string datacperiod = Regex.Match(content, @"\""datacperiod\"":\""(?<datacperiod>\d+)\""").Groups["datacperiod"].Value;
+            string result= new ExecuteSalary().GetSalaryDateRecordCommand(datacyear, datacperiod);
+            bool isExist = result.Equals("1") ? true : false;
+            string msg = "{\"Status\":1,\"Msg\":\""+ isExist + "\"}";
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(msg);

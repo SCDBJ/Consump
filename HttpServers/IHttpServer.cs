@@ -15,6 +15,7 @@ namespace HttpServers
         void GetConsumpList(string content, HttpListenerContext httpListenerContext);
 
         void SaveConsumpW(string content, HttpListenerContext httpListenerContext);
+        void GetConsumpStatW(string content, HttpListenerContext httpListenerContext);
         void GetStatisticAmount(string content, HttpListenerContext httpListenerContext);
         void GetStaticVerifyAmount(string content, HttpListenerContext httpListenerContext);
         void GetAllConsump(string content, HttpListenerContext httpListenerContext);
@@ -32,5 +33,6 @@ namespace HttpServers
         void AddCategory(string content, HttpListenerContext httpListenerContext);
         void GetAllCategory(string content, HttpListenerContext httpListenerContext);
         void DeleteCategory(string content, HttpListenerContext httpListenerContext);
+        void GetSalaryDateRecord(string content, HttpListenerContext httpListenerContext);
     }
 }
