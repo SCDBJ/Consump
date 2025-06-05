@@ -361,7 +361,8 @@ namespace HttpServers
 
         public void GetAllCategory(string content, HttpListenerContext httpListenerContext)
         {
-            string json = new ExecuteCategory().GetAllCategoryCommand();
+            string categoryType = Regex.Match(content, @"\""categoryType\"":\""(?<categoryType>[\S\s]*?)\""").Groups["categoryType"].Value;
+            string json = new ExecuteCategory().GetAllCategoryCommand(categoryType);
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(json);

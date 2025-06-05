@@ -312,7 +312,7 @@ namespace HttpServers.StoreProcedure
                     ConsumpStatisticeModel consumpModel = new ConsumpStatisticeModel();
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        consumpModel = new ConsumpStatisticeModel { consumpType = dt.Rows[i]["consumpType"].ToString(), numbers = dt.Rows[i]["numbers"].ToString(), sumamount = dt.Rows[i]["sumamount"].ToString(), avgamount = dt.Rows[i]["avgamount"].ToString() };
+                        consumpModel = new ConsumpStatisticeModel { consumpType = dt.Rows[i]["consumpType"].ToString(), numbers = int.Parse(dt.Rows[i]["numbers"].ToString()), sumamount = Math.Round(decimal.Parse(dt.Rows[i]["sumamount"].ToString()),2), avgamount = Math.Round(decimal.Parse(dt.Rows[i]["avgamount"].ToString()),2) };
                         consumpList.Add(consumpModel);
                     }
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(consumpList);

@@ -42,7 +42,7 @@ namespace HttpServers.StoreProcedure
             }
             return resultValue;
         }
-        public string GetAllCategoryCommand()
+        public string GetAllCategoryCommand(string categoryType)
         {
             DataSet ds = new DataSet();
 
@@ -53,6 +53,9 @@ namespace HttpServers.StoreProcedure
             }
             SqlCommand myCommand = new SqlCommand("GetAllCategory", myConnection);
             myCommand.CommandType = CommandType.StoredProcedure;
+
+            myCommand.Parameters.Add("@categoryType", SqlDbType.NVarChar);
+            myCommand.Parameters["@categoryType"].Value = categoryType;
             myCommand.ExecuteNonQuery();
 
             SqlDataReader adapter = myCommand.ExecuteReader();

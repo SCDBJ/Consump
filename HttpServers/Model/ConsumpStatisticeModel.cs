@@ -12,15 +12,15 @@ namespace HttpServers.Model
         {
             get;set;
         }
-        public string numbers
+        public int numbers
         {
             get; set;
         }
-        public string sumamount
+        public decimal sumamount
         {
             get; set;
         }
-        public string avgamount
+        public decimal avgamount
         {
             get; set;
         }
