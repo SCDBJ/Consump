@@ -215,6 +215,8 @@ namespace HttpServers.StoreProcedure
                 myCommand.Parameters["@consumpAmount"].Value = consumpModel.consumpAmount;
                 myCommand.Parameters.Add("@consumpNote", SqlDbType.VarChar);
                 myCommand.Parameters["@consumpNote"].Value = consumpModel.consumpNote;
+                myCommand.Parameters.Add("@consumpTime", SqlDbType.VarChar);
+                myCommand.Parameters["@consumpTime"].Value = consumpModel.consumpTime;
 
                 resultValue = myCommand.ExecuteNonQuery();
                 if (myConnection.State == ConnectionState.Open)
