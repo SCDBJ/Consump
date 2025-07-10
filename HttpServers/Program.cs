@@ -13,6 +13,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Timers;
+using HttpServers.StoreProcedure;
 
 namespace HttpServers
 {
@@ -25,6 +27,7 @@ namespace HttpServers
             try
             {
                 ip = GetLocalIP();
+                TimerTick();
                 //ip = "127.0.0.1";
                 HttpListener listerner = new HttpListener();
                 {
@@ -249,6 +252,23 @@ namespace HttpServers
             {
                 //LogHelper.Error("[GetLocalIP]Exception:" + ex.Message);
                 return ex.Message;
+            }
+        }
+        private static void TimerTick()
+        {
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Elapsed += Timer_Tick;
+            timer.Interval = 60000;
+            timer.Start();
+        }
+        private static void Timer_Tick(object sender, EventArgs e)
+        {
+            int day = DateTime.Now.Day;
+            int hour = DateTime.Now.Hour;
+            int minute = DateTime.Now.Minute;
+            if (day == 6 & hour == 6 & minute == 1)
+            {
+                new ExecuteAutoAccount().AutoAccountCommand();
             }
         }
     }

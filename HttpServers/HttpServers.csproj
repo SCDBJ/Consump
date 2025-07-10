@@ -72,6 +72,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHttp.cs" />
+    <Compile Include="StoreProcedure\ExecuteAutoAccount.cs" />
     <Compile Include="StoreProcedure\ExecuteCategory.cs" />
     <Compile Include="StoreProcedure\ExecuteIncome.cs" />
     <Compile Include="StoreProcedure\ExecuteConsump.cs" />
