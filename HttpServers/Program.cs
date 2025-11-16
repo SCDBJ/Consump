@@ -204,6 +204,12 @@ namespace HttpServers
                         case "GetSalaryDateRecord":
                             response.GetSalaryDateRecord(content, ctx);
                             break;
+                        case "AddWebSite":
+                            response.AddWebSite(content, ctx);
+                            break;
+                        case "GetWebSite":
+                            response.GetWebSite(content, ctx);
+                            break;
 
                     }
                 }

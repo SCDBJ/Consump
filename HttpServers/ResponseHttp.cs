@@ -1,6 +1,7 @@
 ﻿
 using HttpServers.Model;
 using HttpServers.Model.Salary;
+using HttpServers.Model.WebSite;
 using HttpServers.StoreProcedure;
 
 using LogLib;
@@ -405,6 +406,37 @@ namespace HttpServers
                 writer.Close();
                 httpListenerContext.Response.Close();
                 Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void AddWebSite(string content, HttpListenerContext httpListenerContext)
+        {
+            WebSiteModel webSiteModel = Newtonsoft.Json.JsonConvert.DeserializeObject<WebSiteModel>(content);
+            int result = new ExecuteWebSite().AddWebSiteCommand(webSiteModel);
+            string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
+            if (result.Equals(1))
+            {
+                msg = "{\"Status\":0,\"Msg\":\"保存成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void GetWebSite(string content, HttpListenerContext httpListenerContext)
+        {
+            string websiteCategory = Regex.Match(content, @"\""websiteCategory\"":\""(?<websiteCategory>[\S\s]*?)\""").Groups["websiteCategory"].Value;
+            string result = new ExecuteWebSite().GetWebSiteCommand(websiteCategory);
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(result);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + result + "\n时间:" + DateTime.Now.ToString());
                 Console.WriteLine("----------------------------------------------------");
             }
         }

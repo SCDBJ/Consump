@@ -69,6 +69,7 @@
     <Compile Include="Model\ConsumpWModel.cs" />
     <Compile Include="Model\StatisticIncomeModel.cs" />
     <Compile Include="Model\StatiVerifyModel.cs" />
+    <Compile Include="Model\WebSite\WebSiteModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHttp.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="StoreProcedure\ExecuteIncome.cs" />
     <Compile Include="StoreProcedure\ExecuteConsump.cs" />
     <Compile Include="StoreProcedure\ExecuteSalary.cs" />
+    <Compile Include="StoreProcedure\ExecuteWebSite.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
