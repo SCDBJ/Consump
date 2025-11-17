@@ -36,6 +36,10 @@ namespace HttpServers.Model.WebSite
         {
             get; set;
         }
+        public int commonUse
+        {
+            get;set;
+        }
         public DateTime createTime
         {
             get; set;
