@@ -210,6 +210,12 @@ namespace HttpServers
                         case "GetWebSite":
                             response.GetWebSite(content, ctx);
                             break;
+                        case "DeleteWebSite":
+                            response.DeleteWebSite(content, ctx);
+                            break;
+                        case "ModifyWebSite":
+                            response.ModifyWebSite(content, ctx);
+                            break;
 
                     }
                 }

@@ -51,7 +51,7 @@ namespace HttpServers.StoreProcedure
             }
             return resultValue;
         }
-        public string GetWebSiteCommand(string websiteCategory)
+        public string GetWebSiteCommand(string websiteCategory,string websiteName)
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             if (myConnection.State != ConnectionState.Open)
@@ -62,6 +62,9 @@ namespace HttpServers.StoreProcedure
             myCommand.CommandType = CommandType.StoredProcedure;
             myCommand.Parameters.Add("@websiteCategory", SqlDbType.VarChar);
             myCommand.Parameters["@websiteCategory"].Value = websiteCategory;
+            myCommand.Parameters.Add("@websiteName", SqlDbType.VarChar);
+            myCommand.Parameters["@websiteName"].Value = websiteName;
+
             myCommand.ExecuteNonQuery();
 
             SqlDataReader adapter = myCommand.ExecuteReader();
@@ -85,6 +88,48 @@ namespace HttpServers.StoreProcedure
             }
 
             return null;
+        }
+        public int DeleteWebSiteCommand(int websiteId)
+        {
+            SqlConnection myConnection = new SqlConnection(connectionString);
+            if (myConnection.State != ConnectionState.Open)
+            {
+                myConnection.Open();
+            }
+            SqlCommand myCommand = new SqlCommand("DeleteWebSite", myConnection);
+            myCommand.CommandType = CommandType.StoredProcedure;
+
+            myCommand.Parameters.Add("@websiteId", SqlDbType.Int);
+            myCommand.Parameters["@websiteId"].Value = websiteId;
+
+            int resultValue = myCommand.ExecuteNonQuery();
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Close();
+            }
+            return resultValue;
+        }
+        public int ModifyWebSiteCommand(int websiteId,int commonUse)
+        {
+            SqlConnection myConnection = new SqlConnection(connectionString);
+            if (myConnection.State != ConnectionState.Open)
+            {
+                myConnection.Open();
+            }
+            SqlCommand myCommand = new SqlCommand("ModifyWebSite", myConnection);
+            myCommand.CommandType = CommandType.StoredProcedure;
+
+            myCommand.Parameters.Add("@websiteId", SqlDbType.Int);
+            myCommand.Parameters["@websiteId"].Value = websiteId;
+            myCommand.Parameters.Add("@commonUse", SqlDbType.Int);
+            myCommand.Parameters["@commonUse"].Value = commonUse;
+
+            int resultValue = myCommand.ExecuteNonQuery();
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Close();
+            }
+            return resultValue;
         }
     }
 }

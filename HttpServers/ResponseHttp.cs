@@ -430,13 +430,51 @@ namespace HttpServers
         public void GetWebSite(string content, HttpListenerContext httpListenerContext)
         {
             string websiteCategory = Regex.Match(content, @"\""websiteCategory\"":\""(?<websiteCategory>[\S\s]*?)\""").Groups["websiteCategory"].Value;
-            string result = new ExecuteWebSite().GetWebSiteCommand(websiteCategory);
+            string websiteName = Regex.Match(content, @"\""websiteName\"":\""(?<websiteName>[\S\s]*?)\""").Groups["websiteName"].Value;
+            string result = new ExecuteWebSite().GetWebSiteCommand(websiteCategory, websiteName);
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(result);
                 writer.Close();
                 httpListenerContext.Response.Close();
                 Console.WriteLine("\n\n服务端返回信息:" + result + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void DeleteWebSite(string content, HttpListenerContext httpListenerContext)
+        {
+            int websiteId = int.Parse(Regex.Match(content, @"\""websiteId\"":\""(?<websiteId>[\S\s]*?)\""").Groups["websiteId"].Value);
+            int result = new ExecuteWebSite().DeleteWebSiteCommand(websiteId);
+            string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
+            if (result == 1)
+            {
+                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void ModifyWebSite(string content, HttpListenerContext httpListenerContext)
+        {
+            int websiteId = int.Parse(Regex.Match(content, @"\""websiteId\"":\""(?<websiteId>[\S\s]*?)\""").Groups["websiteId"].Value);
+            int commonUse = int.Parse(Regex.Match(content, @"\""commonUse\"":\""(?<commonUse>[\S\s]*?)\""").Groups["commonUse"].Value);
+            int result = new ExecuteWebSite().ModifyWebSiteCommand(websiteId, commonUse);
+            string msg = "{\"Status\":0,\"Msg\":\"设置失败\"}";
+            if (result == 1)
+            {
+                msg = "{\"Status\":0,\"Msg\":\"设置成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
                 Console.WriteLine("----------------------------------------------------");
             }
         }
