@@ -462,7 +462,7 @@ namespace HttpServers
         public void ModifyWebSite(string content, HttpListenerContext httpListenerContext)
         {
             int websiteId = int.Parse(Regex.Match(content, @"\""websiteId\"":\""(?<websiteId>[\S\s]*?)\""").Groups["websiteId"].Value);
-            int commonUse = int.Parse(Regex.Match(content, @"\""commonUse\"":\""(?<commonUse>[\S\s]*?)\""").Groups["commonUse"].Value);
+            string commonUse = Regex.Match(content, @"\""commonUse\"":\""(?<commonUse>[\S\s]*?)\""").Groups["commonUse"].Value;
             int result = new ExecuteWebSite().ModifyWebSiteCommand(websiteId, commonUse);
             string msg = "{\"Status\":0,\"Msg\":\"设置失败\"}";
             if (result == 1)

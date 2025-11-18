@@ -41,7 +41,7 @@ namespace HttpServers.StoreProcedure
             myCommand.Parameters["@contentTitle"].Value = webSiteModel.contentTitle;
             myCommand.Parameters.Add("@websiteRemark", SqlDbType.VarChar);
             myCommand.Parameters["@websiteRemark"].Value = webSiteModel.websiteRemark;
-            myCommand.Parameters.Add("@commonUse", SqlDbType.Int);
+            myCommand.Parameters.Add("@commonUse", SqlDbType.VarChar);
             myCommand.Parameters["@commonUse"].Value = webSiteModel.commonUse;
 
             int resultValue = myCommand.ExecuteNonQuery();
@@ -76,7 +76,7 @@ namespace HttpServers.StoreProcedure
                 WebSiteModel webSiteModel;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    webSiteModel = new WebSiteModel { websiteId = dt.Rows[i]["websiteId"].ToString(), websiteName = dt.Rows[i]["websiteName"].ToString(), websiteHome = dt.Rows[i]["websiteHome"].ToString(), websiteDetail = dt.Rows[i]["websiteDetail"].ToString(), websiteCategory = dt.Rows[i]["websiteCategory"].ToString(), contentTitle = dt.Rows[i]["contentTitle"].ToString(), websiteRemark = dt.Rows[i]["websiteRemark"].ToString(), createTime = DateTime.Parse(dt.Rows[i]["createTime"].ToString()),commonUse=int.Parse(dt.Rows[i]["commonUse"].ToString()) };
+                    webSiteModel = new WebSiteModel { websiteId = dt.Rows[i]["websiteId"].ToString(), websiteName = dt.Rows[i]["websiteName"].ToString(), websiteHome = dt.Rows[i]["websiteHome"].ToString(), websiteDetail = dt.Rows[i]["websiteDetail"].ToString(), websiteCategory = dt.Rows[i]["websiteCategory"].ToString(), contentTitle = dt.Rows[i]["contentTitle"].ToString(), websiteRemark = dt.Rows[i]["websiteRemark"].ToString(), createTime = DateTime.Parse(dt.Rows[i]["createTime"].ToString()),commonUse=dt.Rows[i]["commonUse"].ToString() };
                     list.Add(webSiteModel);
                 }
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
@@ -109,7 +109,7 @@ namespace HttpServers.StoreProcedure
             }
             return resultValue;
         }
-        public int ModifyWebSiteCommand(int websiteId,int commonUse)
+        public int ModifyWebSiteCommand(int websiteId,string commonUse)
         {
             SqlConnection myConnection = new SqlConnection(connectionString);
             if (myConnection.State != ConnectionState.Open)
@@ -121,7 +121,7 @@ namespace HttpServers.StoreProcedure
 
             myCommand.Parameters.Add("@websiteId", SqlDbType.Int);
             myCommand.Parameters["@websiteId"].Value = websiteId;
-            myCommand.Parameters.Add("@commonUse", SqlDbType.Int);
+            myCommand.Parameters.Add("@commonUse", SqlDbType.VarChar);
             myCommand.Parameters["@commonUse"].Value = commonUse;
 
             int resultValue = myCommand.ExecuteNonQuery();

@@ -36,7 +36,7 @@ namespace HttpServers.Model.WebSite
         {
             get; set;
         }
-        public int commonUse
+        public string commonUse
         {
             get;set;
         }
