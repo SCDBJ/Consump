@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Timers;
 using HttpServers.StoreProcedure;
+using HttpServers.IHttpServer;
+using HttpServers.ResponseHttp;
 
 namespace HttpServers
 {
@@ -114,7 +116,8 @@ namespace HttpServers
             var absolutePath = ctx.Request.Url.AbsolutePath;
             Console.WriteLine("API Name:" + absolutePath);
             StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-            ResponseHttp response = new ResponseHttp();
+            ConsumpResponse consumpResponse = new ConsumpResponse();
+            WebSiteResponse webSiteResponse = new WebSiteResponse();
             string content = "";
             try
             {
@@ -139,82 +142,82 @@ namespace HttpServers
                     switch (absolutePath.Replace("/", ""))
                     {
                         case "SaveConsump"://保存消费记录(小程序)
-                            response.SaveComsumpe(content, ctx);
+                            consumpResponse.SaveComsumpe(content, ctx);
                             break;
                         case "GetConsumpList"://获取消费记录(小程序)
-                            response.GetConsumpList(content, ctx);
+                            consumpResponse.GetConsumpList(content, ctx);
                             break;
                         case "SaveConsumpW"://保存消费记录(其他应用程序)
-                            response.SaveConsumpW(content, ctx);
+                            consumpResponse.SaveConsumpW(content, ctx);
                             break;
                         case "GetConsumpStatW"://消费统计(小程序)
-                            response.GetConsumpStatW(content, ctx);
+                            consumpResponse.GetConsumpStatW(content, ctx);
                             break;
                         case "GetStatisticAmount":
-                            response.GetStatisticAmount(content, ctx);
+                            consumpResponse.GetStatisticAmount(content, ctx);
                             break;
                         case "GetStaticVerifyAmount":
-                            response.GetStaticVerifyAmount(content, ctx);
+                            consumpResponse.GetStaticVerifyAmount(content, ctx);
                             break;
                         case "GetAllConsump":
-                            response.GetAllConsump(content, ctx);
+                            consumpResponse.GetAllConsump(content, ctx);
                             break;
                         case "DeleteConsumpRecord":
-                            response.DeleteConsumpRecord(content, ctx);
+                            consumpResponse.DeleteConsumpRecord(content, ctx);
                             break;
                         case "AutoAccount":
-                            response.AutoAccount(content, ctx);
+                            consumpResponse.AutoAccount(content, ctx);
                             break;
                         case "SaveIncomeW":
-                            response.SaveIncomeW(content, ctx);
+                            consumpResponse.SaveIncomeW(content, ctx);
                             break;
                         case "GetAllIncome":
-                            response.GetAllIncome(content, ctx);
+                            consumpResponse.GetAllIncome(content, ctx);
                             break;
                         case "GetIncomeStatisticAmount":
-                            response.GetIncomeStatisticAmount(content, ctx);
+                            consumpResponse.GetIncomeStatisticAmount(content, ctx);
                             break;
                         case "GetStatisticYearAmount":
-                            response.GetStatisticYearAmount(content, ctx);
+                            consumpResponse.GetStatisticYearAmount(content, ctx);
                             break;
                         case "DeleteIncomeRecord":
-                            response.DeleteIncomeRecord(content, ctx);
+                            consumpResponse.DeleteIncomeRecord(content, ctx);
                             break;
                         case "GetIncomeStatisticTypeAmount":
-                            response.GetIncomeStatisticTypeAmount(content, ctx);
+                            consumpResponse.GetIncomeStatisticTypeAmount(content, ctx);
                             break;
                         case "GetIncomeStatisticMonthAmount":
-                            response.GetIncomeStatisticMonthAmount(content, ctx);
+                            consumpResponse.GetIncomeStatisticMonthAmount(content, ctx);
                             break;
                         case "AddSalaryRecord":
-                            response.AddSalaryRecord(content, ctx);
+                            consumpResponse.AddSalaryRecord(content, ctx);
                             break;
                         case "GetAllSalaryRecord":
-                            response.GetAllSalaryRecord(content, ctx);
+                            consumpResponse.GetAllSalaryRecord(content, ctx);
                             break;
                         case "AddCategory":
-                            response.AddCategory(content, ctx);
+                            consumpResponse.AddCategory(content, ctx);
                             break;
                         case "GetAllCategory":
-                            response.GetAllCategory(content, ctx);
+                            consumpResponse.GetAllCategory(content, ctx);
                             break;
                         case "DeleteCategory":
-                            response.DeleteCategory(content, ctx);
+                            consumpResponse.DeleteCategory(content, ctx);
                             break;
                         case "GetSalaryDateRecord":
-                            response.GetSalaryDateRecord(content, ctx);
+                            consumpResponse.GetSalaryDateRecord(content, ctx);
                             break;
                         case "AddWebSite":
-                            response.AddWebSite(content, ctx);
+                            webSiteResponse.AddWebSite(content, ctx);
                             break;
                         case "GetWebSite":
-                            response.GetWebSite(content, ctx);
+                            webSiteResponse.GetWebSite(content, ctx);
                             break;
                         case "DeleteWebSite":
-                            response.DeleteWebSite(content, ctx);
+                            webSiteResponse.DeleteWebSite(content, ctx);
                             break;
                         case "ModifyWebSite":
-                            response.ModifyWebSite(content, ctx);
+                            webSiteResponse.ModifyWebSite(content, ctx);
                             break;
 
                     }

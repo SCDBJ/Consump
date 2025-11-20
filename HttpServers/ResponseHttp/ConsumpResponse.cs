@@ -1,14 +1,9 @@
-﻿
-using HttpServers.Model;
+﻿using HttpServers.IHttpServer;
 using HttpServers.Model.Salary;
-using HttpServers.Model.WebSite;
+using HttpServers.Model;
 using HttpServers.StoreProcedure;
-
-using LogLib;
-
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,9 +11,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HttpServers
+namespace HttpServers.ResponseHttp
 {
-    public class ResponseHttp : IHttpServer
+    public class ConsumpResponse : IHttpConsump
     {
         public void SaveComsumpe(string content, HttpListenerContext httpListenerContext)
         {
@@ -61,7 +56,7 @@ namespace HttpServers
         {
             string startTime = Regex.Match(content, @"\""startDate\"":\""(?<startDate>[\S\s]*?)\""").Groups["startDate"].Value;
             string endTime = Regex.Match(content, @"\""endDate\"":\""(?<endDate>[\S\s]*?)\""").Groups["endDate"].Value;
-            string json= new ExecuteConsump().GetConsumpList(startTime, endTime);
+            string json = new ExecuteConsump().GetConsumpList(startTime, endTime);
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(json);
@@ -164,7 +159,7 @@ namespace HttpServers
             string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
             if (result == 1)
             {
-                 msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
+                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
             }
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
@@ -311,7 +306,7 @@ namespace HttpServers
 
         public void AddSalaryRecord(string content, HttpListenerContext httpListenerContext)
         {
-            SalaryItem salaryItem= Newtonsoft.Json.JsonConvert.DeserializeObject<SalaryItem>(content);
+            SalaryItem salaryItem = Newtonsoft.Json.JsonConvert.DeserializeObject<SalaryItem>(content);
             int result = new ExecuteSalary().AddSalaryRecordCommand(salaryItem);
             string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
             if (result.Equals(1))
@@ -397,78 +392,9 @@ namespace HttpServers
         {
             int datacyear = int.Parse(Regex.Match(content, @"\""datacyear\"":\""(?<datacyear>\d+)\""").Groups["datacyear"].Value);
             string datacperiod = Regex.Match(content, @"\""datacperiod\"":\""(?<datacperiod>\d+)\""").Groups["datacperiod"].Value;
-            string result= new ExecuteSalary().GetSalaryDateRecordCommand(datacyear, datacperiod);
+            string result = new ExecuteSalary().GetSalaryDateRecordCommand(datacyear, datacperiod);
             bool isExist = result.Equals("1") ? true : false;
-            string msg = "{\"Status\":1,\"Msg\":\""+ isExist + "\"}";
-            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
-            {
-                writer.Write(msg);
-                writer.Close();
-                httpListenerContext.Response.Close();
-                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
-                Console.WriteLine("----------------------------------------------------");
-            }
-        }
-        public void AddWebSite(string content, HttpListenerContext httpListenerContext)
-        {
-            WebSiteModel webSiteModel = Newtonsoft.Json.JsonConvert.DeserializeObject<WebSiteModel>(content);
-            int result = new ExecuteWebSite().AddWebSiteCommand(webSiteModel);
-            string msg = "{\"Status\":0,\"Msg\":\"保存失败\"}";
-            if (result.Equals(1))
-            {
-                msg = "{\"Status\":0,\"Msg\":\"保存成功\"}";
-            }
-            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
-            {
-                writer.Write(msg);
-                writer.Close();
-                httpListenerContext.Response.Close();
-                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
-                Console.WriteLine("----------------------------------------------------");
-            }
-        }
-        public void GetWebSite(string content, HttpListenerContext httpListenerContext)
-        {
-            string websiteCategory = Regex.Match(content, @"\""websiteCategory\"":\""(?<websiteCategory>[\S\s]*?)\""").Groups["websiteCategory"].Value;
-            string websiteName = Regex.Match(content, @"\""websiteName\"":\""(?<websiteName>[\S\s]*?)\""").Groups["websiteName"].Value;
-            string result = new ExecuteWebSite().GetWebSiteCommand(websiteCategory, websiteName);
-            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
-            {
-                writer.Write(result);
-                writer.Close();
-                httpListenerContext.Response.Close();
-                Console.WriteLine("\n\n服务端返回信息:" + result + "\n时间:" + DateTime.Now.ToString());
-                Console.WriteLine("----------------------------------------------------");
-            }
-        }
-        public void DeleteWebSite(string content, HttpListenerContext httpListenerContext)
-        {
-            int websiteId = int.Parse(Regex.Match(content, @"\""websiteId\"":\""(?<websiteId>[\S\s]*?)\""").Groups["websiteId"].Value);
-            int result = new ExecuteWebSite().DeleteWebSiteCommand(websiteId);
-            string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
-            if (result == 1)
-            {
-                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
-            }
-            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
-            {
-                writer.Write(msg);
-                writer.Close();
-                httpListenerContext.Response.Close();
-                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
-                Console.WriteLine("----------------------------------------------------");
-            }
-        }
-        public void ModifyWebSite(string content, HttpListenerContext httpListenerContext)
-        {
-            int websiteId = int.Parse(Regex.Match(content, @"\""websiteId\"":\""(?<websiteId>[\S\s]*?)\""").Groups["websiteId"].Value);
-            string commonUse = Regex.Match(content, @"\""commonUse\"":\""(?<commonUse>[\S\s]*?)\""").Groups["commonUse"].Value;
-            int result = new ExecuteWebSite().ModifyWebSiteCommand(websiteId, commonUse);
-            string msg = "{\"Status\":0,\"Msg\":\"设置失败\"}";
-            if (result == 1)
-            {
-                msg = "{\"Status\":0,\"Msg\":\"设置成功\"}";
-            }
+            string msg = "{\"Status\":1,\"Msg\":\"" + isExist + "\"}";
             using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
             {
                 writer.Write(msg);
