@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\OperationFile.cs" />
+    <Compile Include="HttpContextResponse\ApplicationWebsite.cs" />
+    <Compile Include="HttpContextResponse\ApplicatonConsump.cs" />
+    <Compile Include="HttpContextResponse\MiniProgramConsump.cs" />
     <Compile Include="IHttpServer\IHttpConsump.cs" />
     <Compile Include="IHttpServer\IHttpWebSite.cs" />
     <Compile Include="Model\CategoryAddModel.cs" />

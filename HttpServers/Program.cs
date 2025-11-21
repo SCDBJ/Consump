@@ -17,6 +17,7 @@ using System.Timers;
 using HttpServers.StoreProcedure;
 using HttpServers.IHttpServer;
 using HttpServers.ResponseHttp;
+using HttpServers.HttpContextResponse;
 
 namespace HttpServers
 {
@@ -84,17 +85,38 @@ namespace HttpServers
         private static void ListenerBinding(ref HttpListener listerner)
         {
             string configPath = Environment.CurrentDirectory + @"\config.ini";
-            string miniProgram = OperationFile.ReadIniData("Interface", "MiniProgram", "", configPath);
+            string miniProgram = OperationFile.ReadIniData("Interface", "MiniProgramConsump", "", configPath);
+            List<string> miniProgramList = new List<string>();
             List<string> interList = new List<string>();
             if ( miniProgram != null )
             {
-                interList.AddRange(miniProgram.Split('|').ToList());
+                for (int i = 0; i < miniProgram.Split('|').Length; i++)
+                {
+                    miniProgramList.Add("MiniConsump/"+ miniProgram.Split('|')[i]);
+                }
+                interList.AddRange(miniProgramList);
             }
-            string appProgram = OperationFile.ReadIniData("Interface", "AppProgram", "", configPath);
-            if(appProgram!=null )
+            string appProgram = OperationFile.ReadIniData("Interface", "AppProgramConsump", "", configPath);
+            List<string> appProgramList = new List<string>();
+            if (appProgram!=null )
             {
-                interList.AddRange(appProgram.Split('|').ToList());
+                for (int i = 0; i < appProgram.Split('|').Length; i++)
+                {
+                    appProgramList.Add("AppConsump/" + appProgram.Split('|')[i]);
+                }
+                interList.AddRange(appProgramList);
             }
+            string appWebSite = OperationFile.ReadIniData("Interface", "AppWebSite", "", configPath);
+            List<string> appWebSiteList = new List<string>();
+            if (appWebSite != null )
+            {
+                for (int i = 0; i < appWebSite.Split('|').Length; i++)
+                {
+                    appWebSiteList.Add("WebSiteEntry/" + appWebSite.Split('|')[i]);
+                }
+                interList.AddRange(appWebSiteList);
+            }
+
             string uriPreFix = "http://" + ip + ":" + port + "/";
             for (int i = 0; i < interList.Count; i++)
             {
@@ -113,11 +135,9 @@ namespace HttpServers
                 return;
             }
             Stream stream = ctx.Request.InputStream;
-            var absolutePath = ctx.Request.Url.AbsolutePath;
-            Console.WriteLine("API Name:" + absolutePath);
+            var urlSegments = ctx.Request.Url.Segments;
+            Console.WriteLine("RequestUrl:" + ctx.Request.Url);
             StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-            ConsumpResponse consumpResponse = new ConsumpResponse();
-            WebSiteResponse webSiteResponse = new WebSiteResponse();
             string content = "";
             try
             {
@@ -139,87 +159,17 @@ namespace HttpServers
                 {
                     content = content.Trim();
                     Console.WriteLine("content:"+ content);
-                    switch (absolutePath.Replace("/", ""))
+                    switch (urlSegments[1].Replace("/",""))
                     {
-                        case "SaveConsump"://保存消费记录(小程序)
-                            consumpResponse.SaveComsumpe(content, ctx);
+                        case "MiniConsump"://消费记录(小程序)
+                            MiniProgramConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
                             break;
-                        case "GetConsumpList"://获取消费记录(小程序)
-                            consumpResponse.GetConsumpList(content, ctx);
+                        case "AppConsump"://消费记录(应用程序)
+                            ApplicatonConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
                             break;
-                        case "SaveConsumpW"://保存消费记录(其他应用程序)
-                            consumpResponse.SaveConsumpW(content, ctx);
+                        case "WebSiteEntry"://网站录入(电脑端)
+                            ApplicationWebsite.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
                             break;
-                        case "GetConsumpStatW"://消费统计(小程序)
-                            consumpResponse.GetConsumpStatW(content, ctx);
-                            break;
-                        case "GetStatisticAmount":
-                            consumpResponse.GetStatisticAmount(content, ctx);
-                            break;
-                        case "GetStaticVerifyAmount":
-                            consumpResponse.GetStaticVerifyAmount(content, ctx);
-                            break;
-                        case "GetAllConsump":
-                            consumpResponse.GetAllConsump(content, ctx);
-                            break;
-                        case "DeleteConsumpRecord":
-                            consumpResponse.DeleteConsumpRecord(content, ctx);
-                            break;
-                        case "AutoAccount":
-                            consumpResponse.AutoAccount(content, ctx);
-                            break;
-                        case "SaveIncomeW":
-                            consumpResponse.SaveIncomeW(content, ctx);
-                            break;
-                        case "GetAllIncome":
-                            consumpResponse.GetAllIncome(content, ctx);
-                            break;
-                        case "GetIncomeStatisticAmount":
-                            consumpResponse.GetIncomeStatisticAmount(content, ctx);
-                            break;
-                        case "GetStatisticYearAmount":
-                            consumpResponse.GetStatisticYearAmount(content, ctx);
-                            break;
-                        case "DeleteIncomeRecord":
-                            consumpResponse.DeleteIncomeRecord(content, ctx);
-                            break;
-                        case "GetIncomeStatisticTypeAmount":
-                            consumpResponse.GetIncomeStatisticTypeAmount(content, ctx);
-                            break;
-                        case "GetIncomeStatisticMonthAmount":
-                            consumpResponse.GetIncomeStatisticMonthAmount(content, ctx);
-                            break;
-                        case "AddSalaryRecord":
-                            consumpResponse.AddSalaryRecord(content, ctx);
-                            break;
-                        case "GetAllSalaryRecord":
-                            consumpResponse.GetAllSalaryRecord(content, ctx);
-                            break;
-                        case "AddCategory":
-                            consumpResponse.AddCategory(content, ctx);
-                            break;
-                        case "GetAllCategory":
-                            consumpResponse.GetAllCategory(content, ctx);
-                            break;
-                        case "DeleteCategory":
-                            consumpResponse.DeleteCategory(content, ctx);
-                            break;
-                        case "GetSalaryDateRecord":
-                            consumpResponse.GetSalaryDateRecord(content, ctx);
-                            break;
-                        case "AddWebSite":
-                            webSiteResponse.AddWebSite(content, ctx);
-                            break;
-                        case "GetWebSite":
-                            webSiteResponse.GetWebSite(content, ctx);
-                            break;
-                        case "DeleteWebSite":
-                            webSiteResponse.DeleteWebSite(content, ctx);
-                            break;
-                        case "ModifyWebSite":
-                            webSiteResponse.ModifyWebSite(content, ctx);
-                            break;
-
                     }
                 }
                 catch (Exception ex)
