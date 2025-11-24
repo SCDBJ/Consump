@@ -76,7 +76,7 @@ namespace HttpServers.StoreProcedure
                 WebSiteModel webSiteModel;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    webSiteModel = new WebSiteModel { websiteId = dt.Rows[i]["websiteId"].ToString(), websiteName = dt.Rows[i]["websiteName"].ToString(), websiteHome = dt.Rows[i]["websiteHome"].ToString(), websiteDetail = dt.Rows[i]["websiteDetail"].ToString(), websiteCategory = dt.Rows[i]["websiteCategory"].ToString(), contentTitle = dt.Rows[i]["contentTitle"].ToString(), websiteRemark = dt.Rows[i]["websiteRemark"].ToString(), createTime = DateTime.Parse(dt.Rows[i]["createTime"].ToString()),commonUse=dt.Rows[i]["commonUse"].ToString() };
+                    webSiteModel = new WebSiteModel { websiteId = dt.Rows[i]["websiteId"].ToString(), websiteName = dt.Rows[i]["websiteName"].ToString(), websiteHome = dt.Rows[i]["websiteHome"].ToString(), websiteDetail = dt.Rows[i]["websiteDetail"].ToString(), websiteCategory = dt.Rows[i]["websiteCategory"].ToString(), contentTitle = dt.Rows[i]["contentTitle"].ToString(), websiteRemark = dt.Rows[i]["websiteRemark"].ToString(), createTime = DateTime.Parse(dt.Rows[i]["createTime"].ToString()),commonUse=dt.Rows[i]["commonUse"].ToString(), websiteDefault = dt.Rows[i]["websiteDefault"].ToString() };
                     list.Add(webSiteModel);
                 }
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);

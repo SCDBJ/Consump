@@ -40,6 +40,10 @@ namespace HttpServers.Model.WebSite
         {
             get;set;
         }
+        public string websiteDefault
+        {
+            get; set;
+        }
         public DateTime createTime
         {
             get; set;
