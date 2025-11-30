@@ -43,6 +43,8 @@ namespace HttpServers.StoreProcedure
             myCommand.Parameters["@websiteRemark"].Value = webSiteModel.websiteRemark;
             myCommand.Parameters.Add("@commonUse", SqlDbType.VarChar);
             myCommand.Parameters["@commonUse"].Value = webSiteModel.commonUse;
+            myCommand.Parameters.Add("@websiteDefault", SqlDbType.VarChar);
+            myCommand.Parameters["@websiteDefault"].Value = webSiteModel.websiteDefault;
 
             int resultValue = myCommand.ExecuteNonQuery();
             if (myConnection.State == ConnectionState.Open)
