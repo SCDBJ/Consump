@@ -116,6 +116,17 @@ namespace HttpServers
                 }
                 interList.AddRange(appWebSiteList);
             }
+            string appStockTrade = OperationFile.ReadIniData("Interface", "AppStockTrade", "", configPath);
+            List<string> appStockTradeList = new List<string>();
+            if (appStockTrade != null)
+            {
+                for (int i = 0; i < appStockTrade.Split('|').Length; i++)
+                {
+                    appStockTradeList.Add("StockTrade/" + appStockTrade.Split('|')[i]);
+                }
+                interList.AddRange(appStockTradeList);
+            }
+
 
             string uriPreFix = "http://" + ip + ":" + port + "/";
             for (int i = 0; i < interList.Count; i++)
@@ -169,6 +180,9 @@ namespace HttpServers
                             break;
                         case "WebSiteEntry"://网站录入(电脑端)
                             ApplicationWebsite.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
+                            break;
+                        case "StockTrade"://股票交易记录
+                            ApplicationStockTrade.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
                             break;
                     }
                 }

@@ -57,10 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\OperationFile.cs" />
+    <Compile Include="HttpContextResponse\ApplicationStockTrade.cs" />
     <Compile Include="HttpContextResponse\ApplicationWebsite.cs" />
     <Compile Include="HttpContextResponse\ApplicatonConsump.cs" />
     <Compile Include="HttpContextResponse\MiniProgramConsump.cs" />
     <Compile Include="IHttpServer\IHttpConsump.cs" />
+    <Compile Include="IHttpServer\IHttpStockTrade.cs" />
     <Compile Include="IHttpServer\IHttpWebSite.cs" />
     <Compile Include="Model\CategoryAddModel.cs" />
     <Compile Include="Model\ConsumpAllModel.cs" />
@@ -73,16 +75,19 @@
     <Compile Include="Model\ConsumpWModel.cs" />
     <Compile Include="Model\StatisticIncomeModel.cs" />
     <Compile Include="Model\StatiVerifyModel.cs" />
+    <Compile Include="Model\StockTrade\StockTradeModel.cs" />
     <Compile Include="Model\WebSite\WebSiteModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHttp\ConsumpResponse.cs" />
+    <Compile Include="ResponseHttp\StockTradeResponse.cs" />
     <Compile Include="ResponseHttp\WebSiteResponse.cs" />
     <Compile Include="StoreProcedure\ExecuteAutoAccount.cs" />
     <Compile Include="StoreProcedure\ExecuteCategory.cs" />
     <Compile Include="StoreProcedure\ExecuteIncome.cs" />
     <Compile Include="StoreProcedure\ExecuteConsump.cs" />
     <Compile Include="StoreProcedure\ExecuteSalary.cs" />
+    <Compile Include="StoreProcedure\ExecuteStockTrade.cs" />
     <Compile Include="StoreProcedure\ExecuteWebSite.cs" />
   </ItemGroup>
   <ItemGroup>
