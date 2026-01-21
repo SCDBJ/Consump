@@ -11,5 +11,6 @@ namespace HttpServers.IHttpServer
     {
         void AddStockTrade(string content, HttpListenerContext httpListenerContext);
         void GetStockTrade(string content, HttpListenerContext httpListenerContext);
+        void DeleteStockTrade(string content, HttpListenerContext httpListenerContext);
     }
 }

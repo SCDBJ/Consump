@@ -34,6 +34,25 @@ namespace HttpServers.ResponseHttp
             }
         }
 
+        public void DeleteStockTrade(string content, HttpListenerContext httpListenerContext)
+        {
+            string StockId = Regex.Match(content, @"\""StockId\"":\""(?<StockId>[\S\s]*?)\""").Groups["StockId"].Value;
+            int result = new ExecuteStockTrade().DeleteStockTradeCommand(StockId);
+            string msg = "{\"Status\":0,\"Msg\":\"删除失败\"}";
+            if (result == 1)
+            {
+                msg = "{\"Status\":0,\"Msg\":\"删除成功\"}";
+            }
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(msg);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + msg + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+
         public void GetStockTrade(string content, HttpListenerContext httpListenerContext)
         {
             string StockCode = Regex.Match(content, @"\""StockCode\"":\""(?<StockCode>[\S\s]*?)\""").Groups["StockCode"].Value;

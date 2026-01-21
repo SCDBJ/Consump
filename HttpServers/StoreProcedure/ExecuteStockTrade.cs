@@ -92,5 +92,25 @@ namespace HttpServers.StoreProcedure
 
             return null;
         }
+        public int DeleteStockTradeCommand(string StockId)
+        {
+            SqlConnection myConnection = new SqlConnection(connectionString);
+            if (myConnection.State != ConnectionState.Open)
+            {
+                myConnection.Open();
+            }
+            SqlCommand myCommand = new SqlCommand("DeleteStockTrade", myConnection);
+            myCommand.CommandType = CommandType.StoredProcedure;
+
+            myCommand.Parameters.Add("@StockId", SqlDbType.Int);
+            myCommand.Parameters["@StockId"].Value = StockId;
+
+            int resultValue = myCommand.ExecuteNonQuery();
+            if (myConnection.State == ConnectionState.Open)
+            {
+                myConnection.Close();
+            }
+            return resultValue;
+        }
     }
 }

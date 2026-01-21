@@ -22,6 +22,9 @@ namespace HttpServers.HttpContextResponse
                 case "GetStockTrade":
                     stockTradeResponse.GetStockTrade(content, ctx);
                     break;
+                case "DeleteStockTrade":
+                    stockTradeResponse.DeleteStockTrade(content, ctx);
+                    break;
             }
         }
     }
