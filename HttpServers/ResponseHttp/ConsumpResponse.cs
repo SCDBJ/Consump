@@ -404,5 +404,31 @@ namespace HttpServers.ResponseHttp
                 Console.WriteLine("----------------------------------------------------");
             }
         }
+        public void GetIncomeExpMonth(string content, HttpListenerContext httpListenerContext)
+        {
+            int incomeExpYear = int.Parse(Regex.Match(content, @"\""IncomeExpYear\"":\""(?<IncomeExpYear>\d+)\""").Groups["IncomeExpYear"].Value);
+            string result = new ExecuteIncomeExp().GetIncomeExpMonthCommand(incomeExpYear);
+            
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(result);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + result + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
+        public void GetIncomeExpYear(string content, HttpListenerContext httpListenerContext)
+        {
+            string result = new ExecuteIncomeExp().GetIncomeExpYearCommand();
+            using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))
+            {
+                writer.Write(result);
+                writer.Close();
+                httpListenerContext.Response.Close();
+                Console.WriteLine("\n\n服务端返回信息:" + result + "\n时间:" + DateTime.Now.ToString());
+                Console.WriteLine("----------------------------------------------------");
+            }
+        }
     }
 }

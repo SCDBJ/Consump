@@ -68,6 +68,8 @@
     <Compile Include="Model\ConsumpAllModel.cs" />
     <Compile Include="Model\ConsumpStatisticeModel.cs" />
     <Compile Include="Model\IncomeAddModel.cs" />
+    <Compile Include="Model\IncomeExpMonth.cs" />
+    <Compile Include="Model\IncomeExpYear.cs" />
     <Compile Include="Model\IncomeWModel.cs" />
     <Compile Include="Model\Salary\SalaryItem.cs" />
     <Compile Include="Model\StatisticConsumpModel.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="StoreProcedure\ExecuteCategory.cs" />
     <Compile Include="StoreProcedure\ExecuteIncome.cs" />
     <Compile Include="StoreProcedure\ExecuteConsump.cs" />
+    <Compile Include="StoreProcedure\ExecuteIncomeExp.cs" />
     <Compile Include="StoreProcedure\ExecuteSalary.cs" />
     <Compile Include="StoreProcedure\ExecuteStockTrade.cs" />
     <Compile Include="StoreProcedure\ExecuteWebSite.cs" />

@@ -75,6 +75,12 @@ namespace HttpServers.HttpContextResponse
                 case "GetSalaryDateRecord":
                     consumpResponse.GetSalaryDateRecord(content, ctx);
                     break;
+                case "GetIncomeExpMonth":
+                    consumpResponse.GetIncomeExpMonth(content, ctx);
+                    break;
+                case "GetIncomeExpYear":
+                    consumpResponse.GetIncomeExpYear(content, ctx);
+                    break;
             }
         }
     }
