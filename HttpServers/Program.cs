@@ -1,23 +1,27 @@
 ﻿
 using HttpServers.Common;
+using HttpServers.HttpContextResponse;
+using HttpServers.IHttpServer;
+using HttpServers.ResponseHttp;
+using HttpServers.StoreProcedure;
 using LogLib;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Timers;
-using HttpServers.StoreProcedure;
-using HttpServers.IHttpServer;
-using HttpServers.ResponseHttp;
-using HttpServers.HttpContextResponse;
+using System.Web;
+using System.Web.UI.WebControls;
 
 namespace HttpServers
 {
@@ -164,25 +168,70 @@ namespace HttpServers
                 return;
             }
             //LogHelper.Info("content:" + content);
-            if (!string.IsNullOrEmpty(content.Trim()))
+            
+            var secretKey = File.ReadAllText(Environment.CurrentDirectory + @"\secretKey.txt");
+
+            JObject resultObject = (JObject)JsonConvert.DeserializeObject(content);
+            if (resultObject == null)
+                return;
+            var sign = resultObject["sign"]?.ToString();
+            var request = resultObject["request"]?.ToString().Replace("\r\n","").Replace(" ","");
+            var clientId = resultObject["clientId"]?.ToString();
+            var timestamp = long.Parse(resultObject["timestamp"]?.ToString());
+            var nonce = long.Parse(resultObject["nonce"]?.ToString());
+            //检查时间戳是否过期 (防止重放)
+            var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (Math.Abs(now - timestamp) > 300)
+            {
+                using (StreamWriter writer = new StreamWriter(ctx.Response.OutputStream))
+                {
+                    string msg = "签名校验不通过！";
+                    writer.Write(msg);
+                    if (writer.BaseStream.CanRead)
+                    {
+                        writer.Close();
+                        ctx.Response.Close();
+                    }
+                    Console.WriteLine("\n\n服务端返回信息:" + msg);
+                }
+                return;
+            }
+            string serverSign = SignService.CalcSignature(clientId, secretKey, nonce, timestamp, request);
+            if (serverSign != sign)
+            {
+                using (StreamWriter writer = new StreamWriter(ctx.Response.OutputStream))
+                {
+                    string msg = "Request Expired！";
+                    writer.Write(msg);
+                    if (writer.BaseStream.CanRead)
+                    {
+                        writer.Close();
+                        ctx.Response.Close();
+                    }
+                    Console.WriteLine("\n\n服务端返回信息:" + msg);
+                }
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(request.Trim()))
             {
                 try
                 {
-                    content = content.Trim();
-                    Console.WriteLine("content:"+ content);
+                    request = request.Trim();
+                    Console.WriteLine("request:" + request);
                     switch (urlSegments[1].Replace("/",""))
                     {
                         case "MiniConsump"://消费记录(小程序)
-                            MiniProgramConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
+                            MiniProgramConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), request);
                             break;
                         case "AppConsump"://消费记录(应用程序)
-                            ApplicatonConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
+                            ApplicatonConsump.WriteResponse(ctx, urlSegments[2].Replace("/", ""), request);
                             break;
                         case "WebSiteEntry"://网站录入(电脑端)
-                            ApplicationWebsite.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
+                            ApplicationWebsite.WriteResponse(ctx, urlSegments[2].Replace("/", ""), request);
                             break;
                         case "StockTrade"://股票交易记录
-                            ApplicationStockTrade.WriteResponse(ctx, urlSegments[2].Replace("/", ""), content);
+                            ApplicationStockTrade.WriteResponse(ctx, urlSegments[2].Replace("/", ""), request);
                             break;
                     }
                 }
