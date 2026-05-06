@@ -185,7 +185,7 @@ namespace HttpServers
             {
                 using (StreamWriter writer = new StreamWriter(ctx.Response.OutputStream))
                 {
-                    string msg = "签名校验不通过！";
+                    string msg = "Request Expired！";
                     writer.Write(msg);
                     if (writer.BaseStream.CanRead)
                     {
@@ -201,7 +201,7 @@ namespace HttpServers
             {
                 using (StreamWriter writer = new StreamWriter(ctx.Response.OutputStream))
                 {
-                    string msg = "Request Expired！";
+                    string msg = "签名校验不通过！";
                     writer.Write(msg);
                     if (writer.BaseStream.CanRead)
                     {
