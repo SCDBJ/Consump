@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
 using System.Web.UI.WebControls;
+using System.Text.Json;
 
 namespace HttpServers
 {
@@ -171,14 +172,15 @@ namespace HttpServers
             
             var secretKey = File.ReadAllText(Environment.CurrentDirectory + @"\secretKey.txt");
 
-            JObject resultObject = (JObject)JsonConvert.DeserializeObject(content);
-            if (resultObject == null)
-                return;
-            var sign = resultObject["sign"]?.ToString();
-            var request = resultObject["request"]?.ToString().Replace("\r\n","").Replace(" ","");
-            var clientId = resultObject["clientId"]?.ToString();
-            var timestamp = long.Parse(resultObject["timestamp"]?.ToString());
-            var nonce = long.Parse(resultObject["nonce"]?.ToString());
+            using JsonDocument doc = JsonDocument.Parse(content);
+            JsonElement root = doc.RootElement;
+            string sign = root.GetProperty("sign").GetString();
+            JsonElement childElement = root.GetProperty("request");
+            
+            string request = childElement.ToString();
+            string clientId = root.GetProperty("clientId").GetString();
+            long timestamp = root.GetProperty("timestamp").GetInt64();
+            long nonce = root.GetProperty("nonce").GetInt64();
             //检查时间戳是否过期 (防止重放)
             var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             if (Math.Abs(now - timestamp) > 300)
